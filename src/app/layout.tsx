@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HisabX - Restaurant Management System",
-  description: "Streamline your restaurant operations with HisabX, the all-in-one cloud restaurant management platform.",
+  title: "HishabX - Restaurant Management System",
+  description: "Streamline your restaurant operations with HishabX, the all-in-one cloud restaurant management platform.",
 };
 
 export default function RootLayout({

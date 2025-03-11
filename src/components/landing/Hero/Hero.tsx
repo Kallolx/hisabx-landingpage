@@ -15,14 +15,14 @@ const Hero = () => {
   return (
     <div className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
-        <h1 className="text-7xl tracking-[-0.06em] sm:text-3xl lg:text-7xl font-bold text-gray-900 max-w-4xl mx-auto">
+        <h1 className="text-7xl tracking-[-0.06em] sm:text-3xl lg:text-7xl font-bold text-gray-900 max-w-4xl mx-auto mb-6">
           Streamline Your Restaurant{' '}
           <br className="hidden sm:block" />
           Operations with{' '}
-          <span className="text-[#6FB3FF]">HisabX.io</span>
+          <span className="text-[#6FB3FF]">HishabX.io</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-6">
           An all-in-one cloud-based restaurant management service at your fingertips.
         </p>
 
