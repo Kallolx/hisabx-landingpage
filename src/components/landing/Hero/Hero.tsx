@@ -9,7 +9,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
           {/* Left Content */}
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-1 mt-24">
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-1 mt-8 lg:mt-12 sm:mt-10">
             {/* Tagline */}
             <div className="inline-flex items-center rounded-full bg-[#6FB3FF]/10 border border-gray-300 px-4 py-1.5 mb-6">
               <span className="text-[#067cfd] text-sm font-medium">
@@ -18,7 +18,7 @@ const Hero = () => {
             </div>
 
             {/* Title & Description */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.06em] font-bold text-black mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[-0.06em] font-bold text-black mb-6">
               Smart Solutions{" "} <br className="hidden lg:block" /> for your
               <span className="text-[#6FB3FF]"> Restaurant</span> Management
             </h1>
@@ -29,7 +29,7 @@ const Hero = () => {
             </p>
 
             {/* CTA Section */}
-            <div className="flex flex-col items-center lg:items-start gap-4">
+            <div className="flex flex-col items-center lg:items-start gap-2">
               <Button
                 href="/signup"
                 variant="primary"
@@ -55,14 +55,14 @@ const Hero = () => {
           </div>
 
           {/* Right side image section */}
-          <div className="relative lg:absolute lg:top-0 lg:right-0 h-[400px] md:h-[400px] lg:h-[70%] w-full lg:w-[50%] flex items-center order-2 lg:mt-30 lg:mr-8 mt-0">
+          <div className="relative lg:absolute lg:top-0 lg:right-0 h-[300px] sm:h-[400px] lg:h-[70%] w-full lg:w-[50%] flex items-center order-2 lg:order-2 lg:mt-30 lg:mr-8">
             <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
-              <div className="relative w-[800px] h-[500px] min-w-[800px]">
+              <div className="relative w-full sm:w-[600px] lg:w-[800px] h-[300px] sm:h-[400px] lg:h-[500px] min-w-0 sm:min-w-[600px] lg:min-w-[800px]">
                 <Image
                   src="/images/img.jpg"
                   alt="HisabX Dashboard"
                   fill
-                  className="object-contain rounded-lg shadow-xl "
+                  className="object-contain rounded-lg shadow-xl"
                   priority
                 />
               </div>
