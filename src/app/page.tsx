@@ -1,24 +1,20 @@
 import Navbar from '@/components/landing/Navbar/Navbar';
 import Hero from '@/components/landing/Hero/Hero';
-import Image from 'next/image';
+import Features from '@/components/landing/Features/Features';
+
+
 export default function Home() {
   return (
-    <main className="relative min-h-screen">
-      {/* Fixed Background Image */}
-      <div className="fixed inset-0 z-0">
-        <Image
-          src="/images/bg.jpg"
-          alt="Background"
-          fill
-          className="object-cover"
-          priority
-          quality={100}
-        />
-        <div className="absolute inset-0" />
-      </div>
-      <Navbar />
-      <div className="pt-16">
-        <Hero />
+    <main className="relative min-h-screen">     
+    
+
+      {/* Main content */}
+      <div className="relative z-10">
+        <Navbar />
+        <div className="flex-grow  bg-[#f2f8ff]">
+          <Hero />
+        </div>
+        <Features />
       </div>
     </main>
   );
