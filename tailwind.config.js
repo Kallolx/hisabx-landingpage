@@ -15,6 +15,7 @@ module.exports = {
       fontFamily: {
         'dm-sans': ['var(--font-dm-sans)', 'sans-serif'],
         'inter': ['var(--font-inter)', 'sans-serif'],
+        'hind-siliguri': ['var(--font-hind-siliguri)', 'sans-serif'],
       },
     },
   },

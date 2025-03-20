@@ -1,204 +1,364 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
+import Image from "next/image";
+import { FaCheck } from "react-icons/fa";
 
-const features = [
-  {
-    id: "location",
-    title: "Location Tracking",
-    description: "Track your staff members' real-time GPS locations on a map, ensuring safety, accountability, and resource optimization.",
-    imageNumber: "1",
-    stats: [
-      { value: "98%", label: "Accuracy Rate" },
-      { value: "24/7", label: "Real-time Tracking" },
-      { value: "100+", label: "Cities Covered" },
-      { value: "50k+", label: "Daily Updates" }
-    ]
-  },
-  {
-    id: "checkin",
-    title: "Check-in, Check-out",
-    description: "Streamline attendance management with digital check-in/out system. Monitor work hours, breaks, and attendance patterns efficiently.",
-    imageNumber: "2",
-    stats: [
-      { value: "99.9%", label: "Uptime" },
-      { value: "10k+", label: "Daily Check-ins" },
-      { value: "500+", label: "Restaurants" },
-      { value: "2k+", label: "Staff Members" }
-    ]
-  },
-  {
-    id: "order",
-    title: "Order Management",
-    description: "Efficiently manage orders, track deliveries, and optimize your restaurant's order fulfillment process in real-time.",
-    imageNumber: "3",
-    stats: [
-      { value: "15k+", label: "Orders Daily" },
-      { value: "30%", label: "Faster Delivery" },
-      { value: "95%", label: "Customer Satisfaction" },
-      { value: "200+", label: "Delivery Partners" }
-    ]
-  },
-  {
-    id: "zone",
-    title: "Zone Management",
-    description: "Define and manage service zones, delivery areas, and staff assignments to optimize coverage and improve service efficiency.",
-    imageNumber: "4",
-    stats: [
-      { value: "50+", label: "Service Zones" },
-      { value: "100%", label: "Coverage" },
-      { value: "2x", label: "Efficiency" },
-      { value: "1k+", label: "Active Zones" }
-    ]
-  },
-  {
-    id: "performance",
-    title: "Performance Analysis",
-    description: "Get detailed insights into staff performance, delivery times, and operational metrics to make data-driven decisions.",
-    imageNumber: "5",
-    stats: [
-      { value: "40%", label: "Cost Reduction" },
-      { value: "25%", label: "Time Saved" },
-      { value: "100+", label: "Reports" },
-      { value: "5k+", label: "Data Points" }
-    ]
-  },
-  {
-    id: "mobile",
-    title: "Mobile App",
-    description: "Access all features on-the-go with our powerful mobile app. Perfect for managers and staff to stay connected and productive.",
-    imageNumber: "6",
-    stats: [
-      { value: "4.8/5", label: "App Rating" },
-      { value: "10k+", label: "Downloads" },
-      { value: "98%", label: "User Retention" },
-      { value: "24/7", label: "Support" }
-    ]
-  }
-];
+interface Feature {
+  id: string;
+  title: string;
+  description: string;
+  bulletPoints: {
+    en: string[];
+    bn: string[];
+  };
+  image: string;
+  color: string;
+}
+
+interface FeatureAccordionProps {
+  feature: Feature;
+  index: number;
+  isBangla: boolean;
+  learnMoreText: string;
+}
 
 const Features = () => {
-  const [activeTab, setActiveTab] = useState("location");
-  const [direction, setDirection] = useState(0);
-
-  const activeFeature = features.find(feature => feature.id === activeTab);
+  const { t, language } = useLanguage();
+  const isBangla = language === 'bn';
+  const [activeFeature, setActiveFeature] = useState(0);
   
-  const handleTabChange = (id: string) => {
-    const currentIndex = features.findIndex(f => f.id === activeTab);
-    const newIndex = features.findIndex(f => f.id === id);
-    setDirection(newIndex > currentIndex ? 1 : -1);
-    setActiveTab(id);
-  };
-
+  // Define features with translations
+  const restaurantFeatures: Feature[] = [
+    {
+      id: "dashboards",
+      title: t.features.featureItems.dashboards.title,
+      description: t.features.featureItems.dashboards.description,
+      bulletPoints: {
+        en: [
+          "Role-specific views with essential information for each user type",
+          "Real-time updates and notifications for critical business metrics",
+          "Interactive data visualization with filters and drill-down capabilities"
+        ],
+        bn: [
+          "প্রতিটি ব্যবহারকারীর জন্য ভূমিকা-নির্দিষ্ট ভিউ",
+          "গুরুত্বপূর্ণ ব্যবসায়িক মেট্রিক্সের জন্য রিয়েল-টাইম আপডেট",
+          "ইন্টারেক্টিভ ডাটা ভিজুয়ালাইজেশন টুলস"
+        ]
+      },
+      image: "/images/features/dashboards.jpg",
+      color: "#6FB3FF"
+    },
+    {
+      id: "reservations",
+      title: t.features.featureItems.reservations.title,
+      description: t.features.featureItems.reservations.description,
+      bulletPoints: {
+        en: [
+          "Streamlined online booking system with instant confirmation",
+          "Smart table allocation to maximize seating capacity and turnover",
+          "Custom event scheduling with special arrangements and requirements"
+        ],
+        bn: [
+          "তাৎক্ষণিক নিশ্চিতকরণ সহ অনলাইন বুকিং সিস্টেম",
+          "আসন ক্ষমতা বাড়ানোর জন্য স্মার্ট টেবিল বরাদ্দ",
+          "বিশেষ আয়োজন ও প্রয়োজনীয়তা সহ অনুষ্ঠান সময়সূচী"
+        ]
+      },
+      image: "/images/features/reservations.jpg",
+      color: "#6FB3FF"
+    },
+    {
+      id: "statistics",
+      title: t.features.featureItems.statistics.title,
+      description: t.features.featureItems.statistics.description,
+      bulletPoints: {
+        en: [
+          "Comprehensive sales reports with customizable date ranges",
+          "Expense tracking and profit margin analysis by menu item",
+          "Customer behavior insights and trend forecasting"
+        ],
+        bn: [
+          "কাস্টমাইজযোগ্য তারিখ পরিসর সহ বিক্রয় প্রতিবেদন",
+          "মেনু আইটেম অনুসারে খরচ ট্র্যাকিং এবং লাভের বিশ্লেষণ",
+          "গ্রাহক আচরণের অন্তর্দৃষ্টি এবং প্রবণতা পূর্বাভাস"
+        ]
+      },
+      image: "/images/features/analytics.jpg",
+      color: "#6FB3FF"
+    },
+    {
+      id: "payroll",
+      title: t.features.featureItems.payroll.title,
+      description: t.features.featureItems.payroll.description,
+      bulletPoints: {
+        en: [
+          "Automated hourly tracking with overtime calculations",
+          "Integrated tip allocation system with fair distribution",
+          "Tax compliance tools with automatic calculation and reporting"
+        ],
+        bn: [
+          "ওভারটাইম গণনার সাথে স্বয়ংক্রিয় ঘন্টাভিত্তিক ট্র্যাকিং",
+          "ন্যায্য বণ্টন সহ সমন্বিত টিপ বরাদ্দ সিস্টেম",
+          "স্বয়ংক্রিয় গণনা এবং প্রতিবেদন সহ ট্যাক্স পরিপালন টুল"
+        ]
+      },
+      image: "/images/features/payroll.jpg",
+      color: "#6FB3FF"
+    },
+    {
+      id: "menu",
+      title: t.features.featureItems.menu.title,
+      description: t.features.featureItems.menu.description,
+      bulletPoints: {
+        en: [
+          "Easy menu creation with drag-and-drop menu builder",
+          "Digital menu integration with QR code ordering capability",
+          "Seasonal menu planning with inventory integration"
+        ],
+        bn: [
+          "ড্র্যাগ-অ্যান্ড-ড্রপ মেনু বিল্ডার সহ সহজ মেনু তৈরি",
+          "QR কোড অর্ডারিং ক্ষমতা সহ ডিজিটাল মেনু ইন্টিগ্রেশন",
+          "ইনভেন্টরি সমন্বয় সহ মৌসুমী মেনু পরিকল্পনা"
+        ]
+      },
+      image: "/images/features/menu.jpg",
+      color: "#6FB3FF"
+    },
+    {
+      id: "orders",
+      title: t.features.featureItems.orders.title,
+      description: t.features.featureItems.orders.description,
+      bulletPoints: {
+        en: [
+          "Unified order management for dine-in, takeout, and delivery",
+          "Kitchen display system with order timing and alerts",
+          "Integration with major food delivery platforms and POS systems"
+        ],
+        bn: [
+          "ডাইন-ইন, টেকআউট, এবং ডেলিভারির জন্য একীভূত অর্ডার ব্যবস্থাপনা",
+          "অর্ডার টাইমিং এবং অ্যালার্ট সহ কিচেন ডিসপ্লে সিস্টেম",
+          "প্রধান খাদ্য বিতরণ প্ল্যাটফর্ম এবং POS সিস্টেমের সাথে সংযোগ"
+        ]
+      },
+      image: "/images/features/orders.jpg",
+      color: "#6FB3FF"
+    }
+  ];
+  
   return (
-    <section className="py-12 sm:py-20]">
+    <section className="py-16 sm:py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8 sm:mb-16 bg-[#6FB3FF]/5 rounded-lg p-2 sm:p-4">
-          {features.map((feature) => (
-            <button
-              key={feature.id}
-              onClick={() => handleTabChange(feature.id)}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs sm:text-sm md:text-base font-medium transition-all duration-300 ease-in-out whitespace-nowrap
-                ${activeTab === feature.id 
-                  ? "bg-[#5A90CC] text-white shadow-lg" 
-                  : "text-gray-600 hover:text-[#6FB3FF] hover:bg-[#6FB3FF]/10"
-                }`}
-            >
-              {feature.title}
-            </button>
-          ))}
+        <div className="text-center mb-12">
+          <h3 className={`text-[#6FB3FF] font-semibold mb-3 ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {isBangla ? 'বৈশিষ্ট্য' : 'Features'}
+          </h3>
+          <h2 className={`text-2xl md:text-3xl font-bold mb-4 tracking-tight ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.features.title}
+          </h2>
+          <p className={`text-gray-600 max-w-2xl mx-auto text-base ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.features.subtitle}
+          </p>
         </div>
 
-        {/* Content */}
-        <div className="text-center mb-8 sm:mb-12">
-          <AnimatePresence mode="wait">
-            <motion.h2
-              key={activeFeature?.title + "-title"}
-              initial={{ opacity: 0, x: 50 * direction }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 * direction }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4"
-            >
-              {activeFeature?.title}
-            </motion.h2>
-            <motion.p
-              key={activeFeature?.description + "-desc"}
-              initial={{ opacity: 0, x: 50 * direction }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 * direction }}
-              transition={{ duration: 0.3, delay: 0.1, ease: "easeInOut" }}
-              className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4"
-            >
-              {activeFeature?.description}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-
-        {/* Image */}
-        <div className="relative w-full aspect-[16/9] max-w-5xl mx-auto mb-8 sm:mb-16">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeFeature?.imageNumber + "-image"}
-              initial={{ opacity: 0, x: 100 * direction }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 * direction }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="w-full h-full bg-white rounded-2xl shadow-[0_8px_30px_rgb(111,179,255,0.2)] flex items-center justify-center"
-            >
-              <span className="text-6xl sm:text-8xl font-bold text-[#6FB3FF]/20">
-                Image {activeFeature?.imageNumber}
-              </span>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Stats Section */}
-        <div className="max-w-4xl mx-auto">
-          <motion.h3
-            key={activeFeature?.title + "-stats-title"}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-12"
-          >
-            Key Statistics
-          </motion.h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
-            {activeFeature?.stats.map((stat, index) => (
-              <div key={stat.label} className="relative">
-                <div className="text-center h-[120px] sm:h-[180px] flex flex-col items-center justify-center">
-                  <motion.div
-                    key={stat.value + "-" + activeFeature.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="text-2xl sm:text-4xl md:text-2xl lg:text-4xl font-bold text-[#6FB3FF] mb-2 sm:mb-3"
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <motion.div
-                    key={stat.label + "-" + activeFeature.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 + 0.1 }}
-                    className="text-base sm:text-lg md:text-xl text-gray-600"
-                  >
-                    {stat.label}
-                  </motion.div>
-                </div>
-                {/* Desktop dividers */}
-                {index < 3 && (
-                  <div className="hidden md:block absolute top-1/2 right-0 -translate-y-1/2 w-px h-24 bg-gray-300" />
+        {/* Feature Tabs - Desktop */}
+        <div className="hidden lg:block">
+          {/* Tab Navigation */}
+          <div className="flex justify-center mb-8 space-x-2 border-b border-gray-200">
+            {restaurantFeatures.map((feature, idx) => (
+              <button
+                key={feature.id}
+                onClick={() => setActiveFeature(idx)}
+                className={`px-5 py-3 text-sm font-medium transition-all relative ${
+                  activeFeature === idx 
+                    ? 'text-[#6FB3FF] font-bold' 
+                    : 'text-gray-500 hover:text-gray-700'
+                } ${isBangla ? 'font-hind-siliguri' : ''}`}
+              >
+                {feature.title}
+                {activeFeature === idx && (
+                  <motion.div 
+                    layoutId="activeTab"
+                    className="absolute bottom-0 left-0 right-0 h-0.5"
+                    style={{ backgroundColor: feature.color }}
+                  />
                 )}
-              </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Feature Content */}
+          <div className="relative h-[530px] overflow-hidden rounded-xl shadow-lg">
+            {restaurantFeatures.map((feature, idx) => (
+              <motion.div
+                key={feature.id}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ 
+                  opacity: activeFeature === idx ? 1 : 0,
+                  x: activeFeature === idx ? 0 : 20,
+                  zIndex: activeFeature === idx ? 10 : 0
+                }}
+                transition={{ duration: 0.3 }}
+                className={`absolute inset-0 flex ${idx % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
+              >
+                {/* Text Content */}
+                <div className="w-1/2 p-12 flex flex-col justify-center bg-white">
+                  <h3 
+                    className={`text-2xl font-bold mb-6 tracking-tight ${isBangla ? 'font-hind-siliguri' : ''}`}
+                    style={{ color: feature.color }}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p className={`text-gray-600 mb-6 leading-relaxed ${isBangla ? 'font-hind-siliguri' : ''}`}>
+                    {feature.description}
+                  </p>
+
+                  {/* Bullet Points with Tick Marks */}
+                  <ul className="mb-6 space-y-3">
+                    {feature.bulletPoints[isBangla ? 'bn' : 'en'].map((point, i) => (
+                      <li key={i} className={`flex items-start ${isBangla ? 'font-hind-siliguri' : ''}`}>
+                        <span className="text-[#6FB3FF] mr-2 mt-0.5 flex-shrink-0">
+                          <FaCheck size={16} />
+                        </span>
+                        <span className="text-gray-700">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    <button 
+                      className={`px-6 py-2 rounded-lg text-white text-sm font-medium transition-all hover:opacity-90 ${isBangla ? 'font-hind-siliguri' : ''}`}
+                      style={{ backgroundColor: feature.color }}
+                    >
+                      {t.features.learnMore}
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Image */}
+                <div className="w-1/2 relative bg-gray-200">
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-500 z-0">
+                    <span className="text-xl">Feature Image {idx + 1}</span>
+                  </div>
+                  {/* Uncomment when you have actual images */}
+                  {/* <Image 
+                    src={feature.image} 
+                    alt={feature.title}
+                    fill
+                    className="object-cover"
+                  /> */}
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
+
+        {/* Feature Accordion - Mobile/Tablet */}
+        <div className="lg:hidden space-y-4">
+          {restaurantFeatures.map((feature, idx) => (
+            <FeatureAccordion 
+              key={feature.id} 
+              feature={feature} 
+              index={idx} 
+              isBangla={isBangla}
+              learnMoreText={t.features.learnMore}
+            />
+          ))}
+        </div>
       </div>
     </section>
+  );
+};
+
+const FeatureAccordion: React.FC<FeatureAccordionProps> = ({ feature, index, isBangla, learnMoreText }) => {
+  const [isOpen, setIsOpen] = useState(index === 0 ? true : false); // Make first one open by default
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="border border-gray-200 rounded-lg overflow-hidden"
+    >
+      {/* Accordion Header */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0"
+            style={{ backgroundColor: feature.color }}
+          >
+            <span className="text-white text-sm font-bold">{index + 1}</span>
+          </div>
+          <h4 className={`text-lg font-semibold text-left ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {feature.title}
+          </h4>
+        </div>
+        <svg
+          className={`w-5 h-5 text-gray-500 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {/* Accordion Content */}
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+        className="overflow-hidden"
+      >
+        <div className="px-6 pb-6">
+          {/* Feature Image */}
+          <div className="aspect-video relative bg-gray-200 rounded-lg mb-4">
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+              <span className="text-xl">Feature Image {index + 1}</span>
+            </div>
+            {/* Uncomment when you have actual images */}
+            {/* <Image 
+              src={feature.image} 
+              alt={feature.title}
+              fill
+              className="object-cover rounded-lg"
+            /> */}
+          </div>
+          
+          {/* Feature Description */}
+          <p className={`text-gray-600 mb-4 ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {feature.description}
+          </p>
+          
+          {/* Bullet Points with Tick Marks for Mobile */}
+          <ul className="mb-5 space-y-2.5">
+            {feature.bulletPoints[isBangla ? 'bn' : 'en'].map((point, i) => (
+              <li key={i} className={`flex items-start ${isBangla ? 'font-hind-siliguri' : ''}`}>
+                <span className="text-[#6FB3FF] mr-2 flex-shrink-0 mt-0.5">
+                  <FaCheck size={14} />
+                </span>
+                <span className="text-gray-700 text-sm">{point}</span>
+              </li>
+            ))}
+          </ul>
+          
+          <button 
+            className={`px-5 py-2 rounded-lg text-white text-sm font-medium transition-all hover:opacity-90 ${isBangla ? 'font-hind-siliguri' : ''}`}
+            style={{ backgroundColor: feature.color }}
+          >
+            {learnMoreText}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

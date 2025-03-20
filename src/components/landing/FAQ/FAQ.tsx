@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 const faqData = {
   general: {
@@ -48,11 +49,12 @@ const faqData = {
   }
 };
 
-const FAQCard = ({ question, answer, isOpen, onClick }: { 
+const FAQCard = ({ question, answer, isOpen, onClick, isBangla }: { 
   question: string; 
   answer: string;
   isOpen: boolean;
   onClick: () => void;
+  isBangla: boolean;
 }) => {
   return (
     <div 
@@ -61,7 +63,7 @@ const FAQCard = ({ question, answer, isOpen, onClick }: {
     >
       <div className="p-6">
         <div className="flex justify-between items-center gap-4">
-          <h3 className="font-semibold text-gray-900">{question}</h3>
+          <h3 className={`font-semibold text-gray-900 ${isBangla ? 'font-hind-siliguri' : ''}`}>{question}</h3>
           <svg
             className={`w-5 h-5 text-[#6FB3FF] transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
@@ -80,7 +82,7 @@ const FAQCard = ({ question, answer, isOpen, onClick }: {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <p className="mt-4 text-gray-600">{answer}</p>
+              <p className={`mt-4 text-gray-600 ${isBangla ? 'font-hind-siliguri' : ''}`}>{answer}</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -91,6 +93,8 @@ const FAQCard = ({ question, answer, isOpen, onClick }: {
 
 const FAQ = () => {
   const [openItems, setOpenItems] = useState<{[key: string]: boolean}>({});
+  const { t, language } = useLanguage();
+  const isBangla = language === 'bn';
 
   const toggleItem = (category: string, index: number) => {
     const key = `${category}-${index}`;
@@ -104,19 +108,19 @@ const FAQ = () => {
     <section className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <p className="text-[#6FB3FF] font-semibold mb-4">FAQ</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Frequently Asked Questions
+          <p className="text-[#6FB3FF] font-semibold mb-4">{t.faq?.title}</p>
+          <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.faq?.subtitle}
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about HisabX and how it can help your business grow
+          <p className={`text-gray-600 max-w-2xl mx-auto ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.faq?.description}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {Object.entries(faqData).map(([category, { title, items }]) => (
+          {Object.entries(t.faq?.categories || {}).map(([category, { title, items }]) => (
             <div key={category}>
-              <h3 className="text-xl font-bold mb-6">{title}</h3>
+              <h3 className={`text-xl font-bold mb-6 ${isBangla ? 'font-hind-siliguri' : ''}`}>{title}</h3>
               <div className="space-y-4">
                 {items.map((item, index) => (
                   <FAQCard
@@ -125,6 +129,7 @@ const FAQ = () => {
                     answer={item.answer}
                     isOpen={openItems[`${category}-${index}`] || false}
                     onClick={() => toggleItem(category, index)}
+                    isBangla={isBangla}
                   />
                 ))}
               </div>
@@ -134,12 +139,14 @@ const FAQ = () => {
 
         {/* Contact Us Section */}
         <div className="mt-20 text-center">
-          <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            If you still have questions or need further assistance, our support team is here to help you 24/7.
+          <h3 className={`text-2xl font-bold mb-4 ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.faq?.stillHaveQuestions.title}
+          </h3>
+          <p className={`text-gray-600 mb-8 max-w-2xl mx-auto ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.faq?.stillHaveQuestions.description}
           </p>
-          <button className="px-8 py-3 bg-[#6FB3FF] text-white font-semibold rounded-xl hover:bg-[#5A9FFF] transition-colors">
-            Contact Support
+          <button className={`px-8 py-3 bg-[#6FB3FF] text-white font-semibold rounded-xl hover:bg-[#5A9FFF] transition-colors ${isBangla ? 'font-hind-siliguri' : ''}`}>
+            {t.faq?.stillHaveQuestions.contactSupport}
           </button>
         </div>
       </div>

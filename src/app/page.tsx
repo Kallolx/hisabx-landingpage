@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen">
       {/* Main content */}
-      <div className="relative z-10">
+      <div className="relative z-10 overflow-x-hidden">
         <Navbar />
         <div className="flex-grow bg-[#f5faff]">
           <Hero />

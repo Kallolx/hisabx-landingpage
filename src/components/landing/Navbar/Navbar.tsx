@@ -4,16 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t, language } = useLanguage();
+  const isBangla = language === 'bn';
 
   const navLinks = [
-    { name: 'Features', href: '/features' },
-    { name: 'How it works', href: '/how-it-works' },
-    { name: 'Pricing', href: '/pricing' },
-    { name: 'FAQ', href: '/faq' },
-    { name: 'Contact', href: '/contact' },
+    { name: t.navbar.features, href: '/features' },
+    { name: t.navbar.howItWorks, href: '/how-it-works' },
+    { name: t.navbar.pricing, href: '/pricing' },
+    { name: t.navbar.faq, href: '/faq' },
+    { name: t.navbar.contact, href: '/contact' },
   ];
 
   return (
@@ -38,7 +41,7 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-black hover:text-[#6FB3FF] px-3 py-2 text-base font-medium transition-colors gap-2"
+                  className={`text-black hover:text-[#6FB3FF] px-3 py-2 text-base font-medium transition-colors gap-2 ${isBangla ? 'font-hind-siliguri' : ''}`}
                 >
                   {link.name}
                 </Link>
@@ -51,16 +54,16 @@ const Navbar = () => {
             <Button 
               href="/login" 
               variant="secondary"
-              className="px-6"
+              className={`px-6 ${isBangla ? 'font-hind-siliguri' : ''}`}
             >
-              Log in
+              {t.navbar.login}
             </Button>
             <Button 
               href="/signup" 
               variant="primary"
-              className="px-6"
+              className={`px-6 ${isBangla ? 'font-hind-siliguri' : ''}`}
             >
-              Get Started
+              {t.navbar.getStarted}
             </Button>
           </div>
 
@@ -93,7 +96,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-[#6FB3FF]"
+                className={`block px-3 py-2 text-base font-medium text-gray-600 hover:text-[#6FB3FF] ${isBangla ? 'font-hind-siliguri' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.name}
@@ -104,17 +107,17 @@ const Navbar = () => {
               <div className="flex flex-col gap-3 px-3">
                 <Link
                   href="/login"
-                  className="flex items-center justify-center w-full border border-gray-200 text-gray-600 hover:text-[#6FB3FF] hover:border-[#6FB3FF] px-4 py-2 rounded-lg text-base font-medium transition-colors"
+                  className={`flex items-center justify-center w-full border border-gray-200 text-gray-600 hover:text-[#6FB3FF] hover:border-[#6FB3FF] px-4 py-2 rounded-lg text-base font-medium transition-colors ${isBangla ? 'font-hind-siliguri' : ''}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Log in
+                  {t.navbar.login}
                 </Link>
                 <Link
                   href="/signup"
-                  className="flex items-center justify-center w-full bg-[#6FB3FF] text-white hover:bg-[#5A90CC] px-4 py-2 rounded-lg text-base font-medium"
+                  className={`flex items-center justify-center w-full bg-[#6FB3FF] text-white hover:bg-[#5A90CC] px-4 py-2 rounded-lg text-base font-medium ${isBangla ? 'font-hind-siliguri' : ''}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Get Started
+                  {t.navbar.getStarted}
                 </Link>
               </div>
             </div>
