@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import Image from "next/image";
 import { FaCheck } from "react-icons/fa";
+import Image from "next/image";
+import { Safari } from "@/components/ui/safari";
+
 
 interface Feature {
   id: string;
@@ -48,7 +50,7 @@ const Features = () => {
           "ইন্টারেক্টিভ ডাটা ভিজুয়ালাইজেশন টুলস"
         ]
       },
-      image: "/images/features/dashboards.jpg",
+      image: "/images/feature/f1.jpg",
       color: "#6FB3FF"
     },
     {
@@ -67,7 +69,7 @@ const Features = () => {
           "বিশেষ আয়োজন ও প্রয়োজনীয়তা সহ অনুষ্ঠান সময়সূচী"
         ]
       },
-      image: "/images/features/reservations.jpg",
+      image: "/images/feature/f2.jpg",
       color: "#6FB3FF"
     },
     {
@@ -86,7 +88,7 @@ const Features = () => {
           "গ্রাহক আচরণের অন্তর্দৃষ্টি এবং প্রবণতা পূর্বাভাস"
         ]
       },
-      image: "/images/features/analytics.jpg",
+      image: "/images/feature/f3.jpg",
       color: "#6FB3FF"
     },
     {
@@ -105,7 +107,7 @@ const Features = () => {
           "স্বয়ংক্রিয় গণনা এবং প্রতিবেদন সহ ট্যাক্স পরিপালন টুল"
         ]
       },
-      image: "/images/features/payroll.jpg",
+      image: "/images/feature/f4.jpg",
       color: "#6FB3FF"
     },
     {
@@ -124,7 +126,7 @@ const Features = () => {
           "ইনভেন্টরি সমন্বয় সহ মৌসুমী মেনু পরিকল্পনা"
         ]
       },
-      image: "/images/features/menu.jpg",
+      image: "/images/feature/f5.jpg",
       color: "#6FB3FF"
     },
     {
@@ -143,10 +145,27 @@ const Features = () => {
           "প্রধান খাদ্য বিতরণ প্ল্যাটফর্ম এবং POS সিস্টেমের সাথে সংযোগ"
         ]
       },
-      image: "/images/features/orders.jpg",
+      image: "/images/feature/f6.jpg",
       color: "#6FB3FF"
     }
   ];
+  
+  // Create specific URL paths for each feature
+  const getFeatureUrl = (featureId: string): string => {
+    // Using simple URLs as requested
+    return `hisabx.io/${featureId}`;
+  };
+  
+  // Placeholder image URL if the feature image is not available
+  const getFeatureImage = (feature: Feature): string => {
+    // If actual image path exists and is valid, use it
+    if (feature.image && !feature.image.includes('undefined')) {
+      return feature.image;
+    }
+    
+    // Otherwise, use an empty string (no image for now)
+    return '';
+  };
   
   return (
     <section className="py-16 sm:py-24 bg-gray-50">
@@ -237,18 +256,23 @@ const Features = () => {
                   </div>
                 </div>
                 
-                {/* Image */}
-                <div className="w-1/2 relative bg-gray-200">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-500 z-0">
-                    <span className="text-xl">Feature Image {idx + 1}</span>
-                  </div>
-                  {/* Uncomment when you have actual images */}
-                  {/* <Image 
-                    src={feature.image} 
-                    alt={feature.title}
-                    fill
-                    className="object-cover"
-                  /> */}
+                {/* Image with Safari Browser */}
+                <div className="w-1/2 relative bg-white flex items-center justify-center p-4 overflow-hidden">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="w-full max-w-[550px] -mt-8"
+                  >
+                    <Safari 
+                      width={600} 
+                      height={480} 
+                      url={getFeatureUrl(feature.id)}
+                      imageSrc={feature.image}
+                      mode="default"
+                      className="shadow-xl transform transition-all duration-500 hover:scale-[1.02] w-full rounded-xl overflow-hidden"
+                    />
+                  </motion.div>
                 </div>
               </motion.div>
             ))}
@@ -276,6 +300,17 @@ const FeatureAccordion: React.FC<FeatureAccordionProps> = ({ feature, index, isB
   const [isOpen, setIsOpen] = useState(index === 0 ? true : false); // Make first one open by default
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
+  
+  // Generate URL for Safari browser in the accordion
+  const getAccordionUrl = (id: string): string => {
+    // Using simple URLs as requested
+    return `hisabx.io/${id}`;
+  };
+  
+  // Get image source for the feature (empty for now)
+  const getAccordionImage = (feat: Feature): string => {
+    return '';
+  };
   
   return (
     <motion.div
@@ -319,18 +354,27 @@ const FeatureAccordion: React.FC<FeatureAccordionProps> = ({ feature, index, isB
         className="overflow-hidden"
       >
         <div className="px-6 pb-6">
-          {/* Feature Image */}
-          <div className="aspect-video relative bg-gray-200 rounded-lg mb-4">
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-              <span className="text-xl">Feature Image {index + 1}</span>
-            </div>
-            {/* Uncomment when you have actual images */}
-            {/* <Image 
-              src={feature.image} 
-              alt={feature.title}
-              fill
-              className="object-cover rounded-lg"
-            /> */}
+          {/* Feature Image - Simple image instead of Safari browser */}
+          <div className="aspect-video relative rounded-lg mb-4 overflow-hidden flex items-center justify-center bg-white">
+            {feature.image ? (
+              <div className="relative w-full h-full overflow-hidden">
+                <Image 
+                  src={feature.image}
+                  alt={feature.title}
+                  width={600}
+                  height={480}
+                  className="object-cover rounded-lg object-top"
+                  style={{ objectPosition: 'top left' }}
+                />
+              </div>
+            ) : (
+              <div 
+                className="w-full h-full flex items-center justify-center rounded-lg"
+                style={{ backgroundColor: feature.color + '33' }} // Adding transparency to feature color
+              >
+                <span className="text-lg font-medium" style={{ color: feature.color }}>{feature.title}</span>
+              </div>
+            )}
           </div>
           
           {/* Feature Description */}
