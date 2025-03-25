@@ -17,6 +17,7 @@ interface Feature {
     bn: string[];
   };
   image: string;
+  mobileImage: string;
   color: string;
 }
 
@@ -51,6 +52,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f1.jpg",
+      mobileImage: "/images/feature/mobile/f1.jpg",
       color: "#6FB3FF"
     },
     {
@@ -70,6 +72,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f2.jpg",
+      mobileImage: "/images/feature/mobile/f2.jpg",
       color: "#6FB3FF"
     },
     {
@@ -89,6 +92,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f3.jpg",
+      mobileImage: "/images/feature/mobile/f3.jpg",
       color: "#6FB3FF"
     },
     {
@@ -108,6 +112,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f4.jpg",
+      mobileImage: "/images/feature/mobile/f4.jpg",
       color: "#6FB3FF"
     },
     {
@@ -127,6 +132,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f5.jpg",
+      mobileImage: "/images/feature/mobile/f5.jpg",
       color: "#6FB3FF"
     },
     {
@@ -146,6 +152,7 @@ const Features = () => {
         ]
       },
       image: "/images/feature/f6.jpg",
+      mobileImage: "/images/feature/mobile/f6.jpg",
       color: "#6FB3FF"
     }
   ];
@@ -356,10 +363,10 @@ const FeatureAccordion: React.FC<FeatureAccordionProps> = ({ feature, index, isB
         <div className="px-6 pb-6">
           {/* Feature Image - Simple image instead of Safari browser */}
           <div className="aspect-video relative rounded-lg mb-4 overflow-hidden flex items-center justify-center bg-white">
-            {feature.image ? (
+            {feature.mobileImage ? (
               <div className="relative w-full h-full overflow-hidden">
                 <Image 
-                  src={feature.image}
+                  src={feature.mobileImage}
                   alt={feature.title}
                   width={600}
                   height={480}
