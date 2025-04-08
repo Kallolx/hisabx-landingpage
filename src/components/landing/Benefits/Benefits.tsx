@@ -152,7 +152,7 @@ const Benefits = () => {
                 </ul>
               </div>
               <div className="hidden md:flex items-center justify-center border-l border-gray-200 pl-8">
-                <img src="/images/logo.png" alt="Dashboard" />
+                <img src="/images/image.png" alt="Dashboard" />
               </div>
             </div>
           </div>
