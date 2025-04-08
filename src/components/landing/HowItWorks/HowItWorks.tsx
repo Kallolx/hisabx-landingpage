@@ -59,8 +59,8 @@ const HowItWorks = () => {
             </div>
             <div className="flex-1 bg-white lg:bg-transparent p-4 lg:p-0 rounded-xl lg:rounded-none">
               {/* Image Container */}
-              <div className={`w-full lg:w-[400px] mb-4 lg:mb-6 rounded-xl lg:rounded-2xl overflow-hidden bg-white shadow-sm lg:shadow-lg ${isLeft ? 'lg:ml-auto' : ''}`}>
-                <div className="aspect-[16/10]">
+              <div className={`w-full lg:w-[400px] mb-4 lg:mb-6 rounded-xl lg:rounded-lg overflow-hidden bg-white shadow-md lg:shadow-xl ${isLeft ? 'lg:ml-auto' : ''}`}>
+                <div className="aspect-[16/10] relative">
                   <StepImage number={step.number} />
                 </div>
               </div>
